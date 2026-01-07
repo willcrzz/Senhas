@@ -5,13 +5,30 @@ using Senhas.Models.Enums;
 
 namespace Senhas.Controllers
 {
-    public class AtendimentoController : Controller
+    public class AtendimentoController : BaseController
     {
         private readonly AppDbContext _context;
 
         public AtendimentoController(AppDbContext context)
         {
             _context = context;
+        }
+
+        public override void OnActionExecuting(Microsoft.AspNetCore.Mvc.Filters.ActionExecutingContext context)
+        {
+            if (context.RouteData.Values["controller"]?.ToString() == "Login")
+            {
+                base.OnActionExecuting(context);
+                return;
+            }
+
+            if (!context.HttpContext.Session.Keys.Contains("UsuarioId"))
+            {
+                context.Result = new RedirectToActionResult("Index", "Login", null);
+                return;
+            }
+
+            base.OnActionExecuting(context);
         }
 
         // Tela principal do atendente
@@ -24,6 +41,7 @@ namespace Senhas.Controllers
                 .OrderByDescending(s => s.DataChamada)
                 .FirstOrDefault();
 
+            // Carregando guichês cadastrados
             ViewBag.Guiches = _context.Guiches.ToList();
 
             return View(senhaAtual);
@@ -31,8 +49,25 @@ namespace Senhas.Controllers
 
         // Chamar próxima senha
         [HttpPost]
-        public IActionResult ChamarProxima(int guicheId)
+        public IActionResult ChamarProxima()
         {
+            var usuarioId = UsuarioId();
+
+            // Descobre quais guichês esse usuário pode usar
+            var guichesUsuario = _context.UsuariosGuiches
+                .Where(x => x.UsuarioId == usuarioId)
+                .Select(x => x.GuicheId)
+                .ToList();
+
+            if (!guichesUsuario.Any())
+            {
+                TempData["Mensagem"] = "Usuário não está vinculado a nenhum guichê!";
+                return RedirectToAction("Index");
+            }
+
+            // Pega o primeiro guichê do usuário
+            var guicheId = guichesUsuario.First();
+
             var senha = _context.Senhas
                 .Include(s => s.TipoSenha)
                 .Where(s => s.Status == StatusSenha.Aguardando)
@@ -50,8 +85,16 @@ namespace Senhas.Controllers
             senha.GuicheId = guicheId;
             senha.DataChamada = DateTime.UtcNow;
 
-            _context.SaveChanges();
+            try
+            {
+                _context.SaveChanges();
+            }
+            catch (DbUpdateException ex)
+            {
+                TempData["Mensagem"] = "Erro ao chamar a senha: " + ex.InnerException?.Message;
+            }
 
+            TempData["Mensagem"] = $"Senha {senha.Codigo} chamada no Guichê {guicheId}";
             return RedirectToAction("Index");
         }
 

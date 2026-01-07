@@ -5,7 +5,7 @@ using Senhas.Models.Enums;
 
 namespace Senhas.Controllers
 {
-    public class SenhasController : Controller
+    public class SenhasController : BaseController
     {
         private readonly AppDbContext _context;
 
@@ -19,7 +19,6 @@ namespace Senhas.Controllers
             return View();
         }
 
-        // Tela para escolher o tipo de senha
         public IActionResult Gerar()
         {
             var tipos = _context.TiposSenha
@@ -30,7 +29,6 @@ namespace Senhas.Controllers
             return View(tipos);
         }
 
-        // POST: gera a senha
         [HttpPost]
         public IActionResult Gerar(int tipoSenhaId)
         {
@@ -61,7 +59,6 @@ namespace Senhas.Controllers
             return RedirectToAction("Gerada", new { id = senha.Id });
         }
 
-        // Tela exibindo a senha gerada
         public IActionResult Gerada(int id)
         {
             var senha = _context.Senhas

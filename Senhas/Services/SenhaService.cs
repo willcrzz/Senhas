@@ -1,4 +1,5 @@
-﻿using Senhas.Models.Entities;
+﻿using Microsoft.EntityFrameworkCore;
+using Senhas.Models.Entities;
 using Senhas.Models.Enums;
 using Senhas.Services.Interfaces;
 
@@ -38,7 +39,11 @@ public class SenhaService : ISenhaService
 
     public Senha? ChamarProximaSenha(int guicheId)
     {
+        var guiche = _context.Guiches.Find(guicheId);
+        if (guiche == null) return null;
+
         var senha = _context.Senhas
+            .Include(s => s.TipoSenha)
             .Where(s => s.Status == StatusSenha.Aguardando)
             .OrderByDescending(s => s.TipoSenha.Prioridade)
             .ThenBy(s => s.DataCriacao)
@@ -48,9 +53,10 @@ public class SenhaService : ISenhaService
 
         senha.Status = StatusSenha.EmAtendimento;
         senha.GuicheId = guicheId;
-        senha.DataChamada = DateTime.Now;
+        senha.DataChamada = DateTime.UtcNow;
 
         _context.SaveChanges();
         return senha;
     }
+
 }

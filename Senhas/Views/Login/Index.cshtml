@@ -1,0 +1,257 @@
+﻿@{
+    ViewData["Title"] = "Login";
+}
+
+<div class="login-container">
+
+    <!-- Mensagens -->
+    @if (TempData["Erro"] != null)
+    {
+        <div class="alert">@TempData["Erro"]</div>
+    }
+    @if (TempData["Sucesso"] != null)
+    {
+        <div class="success">@TempData["Sucesso"]</div>
+    }
+
+    <div class="login-box">
+        <h2>Login</h2>
+        <form asp-action="Login" method="post" id="loginForm">
+            <input type="text" name="usuario" placeholder="Usuário" required />
+            <input type="password" name="senha" placeholder="Senha" required />
+            <button type="submit">Entrar</button>
+            <p>
+                <a href="#" onclick="openModal('registerModal')">Registrar</a> |
+                <a href="#" onclick="openModal('forgotModal')">Esqueci minha senha</a>
+            </p>
+        </form>
+    </div>
+</div>
+
+<!-- Modal Registrar -->
+<div id="registerModal" class="modal">
+    <div class="modal-content">
+        <span class="close" onclick="closeModal('registerModal')">&times;</span>
+        <h2>Registrar Usuário</h2>
+        <form asp-action="Registrar" method="post" id="registerForm">
+            <input type="text" name="nome" placeholder="Nome" required />
+            <input type="text" name="sobrenome" placeholder="Sobrenome" required />
+            <input type="text" name="cpf" placeholder="CPF" required pattern="\d{11}" title="Digite 11 números" />
+            <input type="email" name="email" placeholder="E-mail" required />
+            <input type="text" name="usuario" placeholder="Usuário" required />
+            <input type="password" name="senha" placeholder="Senha" required pattern=".{6,}" title="Mínimo 6 caracteres" />
+            <input type="password" name="confirmarSenha" placeholder="Confirmar Senha" required />
+            <button type="submit">Registrar</button>
+        </form>
+    </div>
+</div>
+
+<!-- Modal Esqueci Senha -->
+<div id="forgotModal" class="modal">
+    <div class="modal-content">
+        <span class="close" onclick="closeModal('forgotModal')">&times;</span>
+        <h2>Recuperar Senha</h2>
+        <form asp-action="EsqueciSenha" method="post" id="forgotForm">
+            <input type="email" name="email" placeholder="Digite seu e-mail" required />
+            <button type="submit">Enviar Link</button>
+        </form>
+    </div>
+</div>
+
+
+
+<script>
+      function openModal(id) {
+        document.getElementById(id).style.display = 'block';
+    }
+
+    function closeModal(id) {
+        document.getElementById(id).style.display = 'none';
+    }
+
+    // Fecha modal clicando fora
+    window.onclick = function(event) {
+        const modals = document.querySelectorAll('.modal');
+        modals.forEach(modal => {
+            if (event.target == modal) {
+                modal.style.display = "none";
+            }
+        });
+    };
+
+</script>
+
+
+
+<style>
+    /* ----------------------------
+       Reset e fonte
+    ---------------------------- */
+    body {
+        font-family: Arial, sans-serif;
+        background: #f0f2f5;
+        margin: 0;
+        padding: 0;
+    }
+
+    /* ----------------------------
+       Container central
+    ---------------------------- */
+    .login-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+    }
+
+    /* ----------------------------
+       Box login
+    ---------------------------- */
+    .login-box {
+        background: #fff;
+        padding: 40px 50px;
+        border-radius: 12px;
+        box-shadow: 0 6px 20px rgba(0,0,0,0.3);
+        width: 350px;
+        text-align: center;
+    }
+
+        .login-box h2 {
+            margin-bottom: 25px;
+            color: #333;
+        }
+
+        .login-box input {
+            width: 100%;
+            padding: 12px;
+            margin-bottom: 15px;
+            border-radius: 6px;
+            border: 1px solid #ccc;
+            box-sizing: border-box;
+            font-size: 14px;
+        }
+
+        .login-box button {
+            width: 100%;
+            padding: 12px;
+            background: #007bff;
+            border: none;
+            color: #fff;
+            font-size: 16px;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+            .login-box button:hover {
+                background: #0056b3;
+            }
+
+        .login-box p {
+            font-size: 14px;
+            margin-top: 10px;
+        }
+
+        .login-box a {
+            color: #007bff;
+            text-decoration: none;
+        }
+
+            .login-box a:hover {
+                text-decoration: underline;
+            }
+
+    /* ----------------------------
+       Mensagens de alerta
+    ---------------------------- */
+    .alert {
+        color: #721c24;
+        background-color: #f8d7da;
+        border: 1px solid #f5c6cb;
+        padding: 12px;
+        margin-bottom: 15px;
+        border-radius: 6px;
+    }
+
+    .success {
+        color: #155724;
+        background-color: #d4edda;
+        border: 1px solid #c3e6cb;
+        padding: 12px;
+        margin-bottom: 15px;
+        border-radius: 6px;
+    }
+
+    /* ----------------------------
+       Modal
+    ---------------------------- */
+    .modal {
+        display: none;
+        position: fixed;
+        z-index: 10;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        overflow: auto;
+        background-color: rgba(0,0,0,0.5);
+    }
+
+    .modal-content {
+        background-color: #fff;
+        margin: 10% auto;
+        padding: 30px 40px;
+        border-radius: 12px;
+        width: 400px;
+        max-width: 90%;
+        text-align: center;
+        position: relative;
+    }
+
+        .modal-content h2 {
+            margin-bottom: 25px;
+            color: #333;
+        }
+
+        .modal-content input {
+            width: 100%;
+            padding: 12px;
+            margin-bottom: 15px;
+            border-radius: 6px;
+            border: 1px solid #ccc;
+            box-sizing: border-box;
+            font-size: 14px;
+        }
+
+        .modal-content button {
+            width: 100%;
+            padding: 12px;
+            background: #28a745;
+            border: none;
+            color: #fff;
+            font-size: 16px;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+            .modal-content button:hover {
+                background: #218838;
+            }
+
+    .close {
+        color: #aaa;
+        position: absolute;
+        top: 12px;
+        right: 20px;
+        font-size: 28px;
+        font-weight: bold;
+        cursor: pointer;
+    }
+
+        .close:hover {
+            color: black;
+        }
+
+   
+</style>

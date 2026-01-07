@@ -7,6 +7,10 @@ public class AppDbContext : DbContext
     public DbSet<Senha> Senhas { get; set; }
     public DbSet<Guiche> Guiches { get; set; }
     public DbSet<TipoSenha> TiposSenha { get; set; }
+    public DbSet<Usuario> Usuarios { get; set; }
+
+    public DbSet<UsuarioGuiche> UsuariosGuiches { get; set; }
+
 
     public AppDbContext(DbContextOptions<AppDbContext> options)
         : base(options)
@@ -20,5 +24,21 @@ public class AppDbContext : DbContext
             .HasConversion<string>();
 
         base.OnModelCreating(modelBuilder);
+
+        modelBuilder.Entity<UsuarioGuiche>()
+            .HasKey(x => new { x.UsuarioId, x.GuicheId });
+
+        modelBuilder.Entity<UsuarioGuiche>()
+            .HasOne(x => x.Usuario)
+            .WithMany(x => x.UsuarioGuiches)
+            .HasForeignKey(x => x.UsuarioId);
+
+        modelBuilder.Entity<UsuarioGuiche>()
+            .HasOne(x => x.Guiche)
+            .WithMany(x => x.UsuarioGuiches)
+            .HasForeignKey(x => x.GuicheId);
+
     }
+
+
 }

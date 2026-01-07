@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -10,9 +11,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Senhas.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260107142305_addemail")]
+    partial class addemail
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -141,21 +144,6 @@ namespace Senhas.Migrations
                     b.ToTable("Usuarios");
                 });
 
-            modelBuilder.Entity("Senhas.Models.Entities.UsuarioGuiche", b =>
-                {
-                    b.Property<int>("UsuarioId")
-                        .HasColumnType("integer");
-
-                    b.Property<int>("GuicheId")
-                        .HasColumnType("integer");
-
-                    b.HasKey("UsuarioId", "GuicheId");
-
-                    b.HasIndex("GuicheId");
-
-                    b.ToTable("UsuariosGuiches");
-                });
-
             modelBuilder.Entity("Senhas.Models.Entities.Senha", b =>
                 {
                     b.HasOne("Senhas.Models.Entities.Guiche", "Guiche")
@@ -171,35 +159,6 @@ namespace Senhas.Migrations
                     b.Navigation("Guiche");
 
                     b.Navigation("TipoSenha");
-                });
-
-            modelBuilder.Entity("Senhas.Models.Entities.UsuarioGuiche", b =>
-                {
-                    b.HasOne("Senhas.Models.Entities.Guiche", "Guiche")
-                        .WithMany("UsuarioGuiches")
-                        .HasForeignKey("GuicheId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Senhas.Models.Entities.Usuario", "Usuario")
-                        .WithMany("UsuarioGuiches")
-                        .HasForeignKey("UsuarioId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Guiche");
-
-                    b.Navigation("Usuario");
-                });
-
-            modelBuilder.Entity("Senhas.Models.Entities.Guiche", b =>
-                {
-                    b.Navigation("UsuarioGuiches");
-                });
-
-            modelBuilder.Entity("Senhas.Models.Entities.Usuario", b =>
-                {
-                    b.Navigation("UsuarioGuiches");
                 });
 #pragma warning restore 612, 618
         }

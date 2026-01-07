@@ -5,7 +5,7 @@ using Senhas.Models.Enums;
 
 namespace Senhas.Controllers
 {
-    public class PainelController : Controller
+    public class PainelController : BaseController
     {
         private readonly AppDbContext _context;
 

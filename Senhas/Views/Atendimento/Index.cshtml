@@ -26,13 +26,13 @@
     @if (Model == null)
     {
         <form asp-action="ChamarProxima" method="post" class="atendimento-form">
-            <select name="guicheId" class="atendimento-select" required>
+           @*  <select name="guicheId" class="atendimento-select" required>
                 <option value="">Selecione o guichê</option>
                 @foreach (var g in guiches)
                 {
                     <option value="@g.Id">@g.Nome</option>
                 }
-            </select>
+            </select> *@
 
             <button type="submit" class="atendimento-botao chamar">
                 Chamar Próxima Senha
