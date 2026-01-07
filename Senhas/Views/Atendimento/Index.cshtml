@@ -1,0 +1,233 @@
+﻿@model Senhas.Models.Entities.Senha
+
+@{
+    ViewData["Title"] = "Atendimento";
+    var guiches = ViewBag.Guiches as List<Senhas.Models.Entities.Guiche>;
+}
+
+<link rel="stylesheet" href="~/css/atendimento.css" />
+
+<header class="cabecalho">
+    <nav class="cabecalho__menu">
+        <a class="cabecalho__menu__link" href="/Home/Index">Home</a>
+    </nav>
+</header>
+
+<div class="atendimento-container">
+    <h1 class="atendimento-titulo">Painel do Atendente</h1>
+
+    @if (TempData["Mensagem"] != null)
+    {
+        <div class="atendimento-alerta">
+            @TempData["Mensagem"]
+        </div>
+    }
+
+    @if (Model == null)
+    {
+        <form asp-action="ChamarProxima" method="post" class="atendimento-form">
+            <select name="guicheId" class="atendimento-select" required>
+                <option value="">Selecione o guichê</option>
+                @foreach (var g in guiches)
+                {
+                    <option value="@g.Id">@g.Nome</option>
+                }
+            </select>
+
+            <button type="submit" class="atendimento-botao chamar">
+                Chamar Próxima Senha
+            </button>
+        </form>
+    }
+    else
+    {
+        <div class="atendimento-card">
+            <h2 class="atendimento-subtitulo">Senha em Atendimento</h2>
+
+            <div class="atendimento-senha">
+                @Model.Codigo
+            </div>
+
+            <p class="atendimento-guiche">
+                Guichê: <strong>@Model.Guiche?.Nome</strong>
+            </p>
+
+            <form asp-action="Finalizar" method="post">
+                <input type="hidden" name="senhaId" value="@Model.Id" />
+                <button type="submit" class="atendimento-botao finalizar">
+                    Finalizar Atendimento
+                </button>
+            </form>
+        </div>
+    }
+</div>
+
+<style>
+    
+    :root {
+        --cor-primaria: #000000;
+        --cor-secundaria: #ffffff;
+        --cor-terciaria: #22D4FD;
+        --cor-hover: #1bb9dd;
+        --fonte: 'Montserrat', Arial, sans-serif;
+    }
+
+    /* =========================
+       RESET
+    ========================= */
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+
+   
+    body {
+        background-color: var(--cor-primaria);
+        color: var(--cor-secundaria);
+        font-family: var(--fonte);
+    }
+
+    /* =========================
+       HEADER / NAV
+    ========================= */
+    .cabecalho {
+        width: 100%;
+        background-color: rgba(0, 0, 0, 0.95);
+        padding: 16px 40px;
+        position: fixed;
+        top: 0;
+        left: 0;
+        z-index: 1000;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.6);
+    }
+
+    .cabecalho__menu {
+        display: flex;
+        align-items: center;
+    }
+
+    .cabecalho__menu__link {
+        font-size: 1.2rem;
+        font-weight: 600;
+        color: var(--cor-secundaria);
+        text-decoration: none;
+        padding: 10px 22px;
+        border-radius: 8px;
+        transition: all 0.25s ease;
+    }
+
+        .cabecalho__menu__link:hover {
+            background-color: var(--cor-terciaria);
+            color: #000;
+        }
+
+    /* =========================
+       CONTAINER
+    ========================= */
+    .atendimento-container {
+        min-height: 100vh;
+        padding-top: 120px; /* espaço para header fixo */
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+    }
+
+    /* =========================
+       TÍTULO
+    ========================= */
+    .atendimento-titulo {
+        font-size: 3rem;
+        margin-bottom: 40px;
+    }
+
+    /* =========================
+       ALERTA
+    ========================= */
+    .atendimento-alerta {
+        background-color: #ffc107;
+        color: #000;
+        padding: 16px 24px;
+        border-radius: 8px;
+        font-size: 1.2rem;
+        margin-bottom: 30px;
+        max-width: 600px;
+    }
+
+    /* =========================
+       FORM
+    ========================= */
+    .atendimento-form {
+        display: flex;
+        flex-direction: column;
+        gap: 25px;
+        width: 100%;
+        max-width: 500px;
+    }
+
+    .atendimento-select {
+        padding: 16px;
+        font-size: 1.2rem;
+        border-radius: 8px;
+        border: none;
+    }
+
+    /* =========================
+       CARD
+    ========================= */
+    .atendimento-card {
+        background-color: #111;
+        padding: 50px;
+        border-radius: 16px;
+        max-width: 600px;
+        width: 100%;
+    }
+
+    .atendimento-subtitulo {
+        font-size: 2rem;
+        margin-bottom: 30px;
+    }
+
+    .atendimento-senha {
+        font-size: 6rem;
+        font-weight: bold;
+        color: var(--cor-terciaria);
+        margin-bottom: 20px;
+    }
+
+    .atendimento-guiche {
+        font-size: 1.6rem;
+        margin-bottom: 30px;
+    }
+
+    /* =========================
+       BOTÕES
+    ========================= */
+    .atendimento-botao {
+        padding: 18px;
+        font-size: 1.5rem;
+        font-weight: bold;
+        border-radius: 10px;
+        cursor: pointer;
+        border: none;
+        transition: transform 0.2s ease, opacity 0.2s ease;
+    }
+
+        .atendimento-botao:hover {
+            transform: scale(1.05);
+            opacity: 0.9;
+        }
+
+        .atendimento-botao.chamar {
+            background-color: var(--cor-terciaria);
+            color: #000;
+        }
+
+        .atendimento-botao.finalizar {
+            background-color: #dc3545;
+            color: #fff;
+        }
+
+    
+</style>
