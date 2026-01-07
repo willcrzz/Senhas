@@ -51,7 +51,7 @@ namespace Senhas.Controllers
         [HttpPost]
         public IActionResult ChamarProxima()
         {
-            var usuarioId = UsuarioId();
+            var usuarioId = UsuarioId;
 
             // Descobre quais guichês esse usuário pode usar
             var guichesUsuario = _context.UsuariosGuiches

@@ -41,6 +41,7 @@ public class LoginController : Controller
         // Armazena dados básicos
         HttpContext.Session.SetInt32("UsuarioId", user.Id);
         HttpContext.Session.SetString("UsuarioNome", user.Nome);
+        HttpContext.Session.SetString("Perfil", user.Perfil.ToString());
 
         // Busca guichê do usuário na tabela de vínculo
         var guicheUser = await _context.UsuariosGuiches
@@ -48,13 +49,22 @@ public class LoginController : Controller
             .Select(x => x.GuicheId)
             .FirstOrDefaultAsync();
 
-        if (guicheUser == 0)
+        // Busca nível do usuário
+        var perfil = user.Perfil.ToString().ToLower();
+
+        // Se usuário NÃO é admin e NÃO tem guichê → bloquear
+        if (perfil != "admin" && guicheUser == 0)
         {
             TempData["Erro"] = "Usuário não possui guichê vinculado! Contate o administrador.";
             return RedirectToAction("Index");
         }
 
-        HttpContext.Session.SetInt32("GuicheId", guicheUser);
+        // Se tem guichê, grava
+        if (guicheUser > 0)
+            HttpContext.Session.SetInt32("GuicheId", guicheUser);
+
+
+        
 
         return RedirectToAction("Index", "Home");
     }

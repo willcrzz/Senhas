@@ -1,8 +1,10 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.EntityFrameworkCore;
 using Senhas.Models.Entities;
 
-public class AdminController : Controller
+public class AdminController : BaseController
 {
     private readonly AppDbContext _context;
 
@@ -10,6 +12,19 @@ public class AdminController : Controller
     {
         _context = context;
     }
+
+    public override void OnActionExecuting(ActionExecutingContext context)
+    {
+        base.OnActionExecuting(context);
+
+        // Se não for admin → bloqueia
+        if (!IsAdmin)
+        {
+            context.Result = new UnauthorizedResult();
+            return;
+        }
+    }
+
 
     // Lista todos usuários e guichês
     public async Task<IActionResult> Index()

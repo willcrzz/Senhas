@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Senhas.Models.Enums;
+using System.ComponentModel.DataAnnotations;
 
 
 
@@ -11,6 +12,8 @@ namespace Senhas.Models.Entities
         [Required] public string Nome { get; set; } = null!;
 
         [Required] public string Sobrenome { get; set; } = null!;
+
+        public string Username { get; set; }
 
         [Required] [EmailAddress] public string Email { get; set; } = null!;
 
@@ -25,6 +28,9 @@ namespace Senhas.Models.Entities
         public bool Confirmado { get; set; } = false;
 
         public string? TokenConfirmacao { get; set; }
+
+        public PerfilUsuario Perfil { get; set; } = PerfilUsuario.Normal;
+
         // Guichês atribuídos
         public List<UsuarioGuiche> UsuarioGuiches { get; set; }
 

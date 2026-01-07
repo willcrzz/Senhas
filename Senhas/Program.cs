@@ -1,5 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using Senhas.Models.Entities;
+using Senhas.Models.Enums;
+
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -27,6 +29,7 @@ using (var scope = app.Services.CreateScope())
     var context = scope.ServiceProvider.GetRequiredService<AppDbContext>();
     context.Database.Migrate(); // cria banco se não existir
 
+    // TIPOS SENHA
     if (!context.TiposSenha.Any())
     {
         context.TiposSenha.AddRange(
@@ -34,10 +37,10 @@ using (var scope = app.Services.CreateScope())
             new TipoSenha { Nome = "Prioritária", Prefixo = "P", Prioridade = 3 },
             new TipoSenha { Nome = "Preferencial", Prefixo = "S", Prioridade = 2 }
         );
-
         context.SaveChanges();
     }
 
+    // GUICHÊS
     if (!context.Guiches.Any())
     {
         context.Guiches.AddRange(
@@ -45,6 +48,27 @@ using (var scope = app.Services.CreateScope())
             new Guiche { Nome = "Guichê 02" },
             new Guiche { Nome = "Guichê 03" }
         );
+        context.SaveChanges();
+    }
+
+    // ADMIN SEED DO APPS SETTINGS
+    if (!context.Usuarios.Any(u => u.Perfil == PerfilUsuario.Admin))
+    {
+        var adminCfg = builder.Configuration.GetSection("AdminAccount");
+
+        var admin = new Usuario
+        {
+            Nome = adminCfg["Nome"] ?? "Administrador",
+            Sobrenome = adminCfg["Sobrenome"] ?? "Sistema",
+            Username = adminCfg["UserName"] ?? "admin",
+            Senha = adminCfg["Password"] ?? "123",
+            Email = adminCfg["Email"] ?? "admin@sistema.local",
+            Cpf = adminCfg["Cpf"] ?? "00000000000",
+            Confirmado = true,
+            Perfil = PerfilUsuario.Admin
+        };
+
+        context.Usuarios.Add(admin);
         context.SaveChanges();
     }
 
