@@ -7,7 +7,7 @@
 
 <meta http-equiv="refresh" content="5" />
 
-<link rel="stylesheet" href="~/css/painel.css" />
+<body>
 
 <header class="cabecalho">
     <nav class="cabecalho__menu">
@@ -29,7 +29,7 @@
                 @ultima.Codigo
             </div>
             <div class="guiche-atual">
-                 @ultima.Guiche?.Nome
+                @ultima.Guiche?.Nome
             </div>
         </div>
     }
@@ -40,25 +40,26 @@
 
         <table class="painel-tabela">
             <thead>
-                <tr>
-                    <th>Senha</th>
-                    <th>Guichê</th>
-                    <th>Horário</th>
-                </tr>
+            <tr>
+                <th>Senha</th>
+                <th>Guichê</th>
+                <th>Horário</th>
+            </tr>
             </thead>
             <tbody>
-                @foreach (var s in Model)
-                {
-                    <tr>
-                        <td>@s.Codigo</td>
-                        <td>@s.Guiche?.Nome</td>
-                        <td>@s.DataChamada?.ToString("HH:mm")</td>
-                    </tr>
-                }
+            @foreach (var s in Model)
+            {
+                <tr>
+                    <td>@s.Codigo</td>
+                    <td>@s.Guiche?.Nome</td>
+                    <td>@s.DataChamada?.ToString("HH:mm")</td>
+                </tr>
+            }
             </tbody>
         </table>
     </div>
 </div>
+</body>
 
 <style>
     :root {
