@@ -87,9 +87,10 @@ namespace Senhas.Controllers
                 return RedirectToAction("Index");
             }
 
-            senha.Status = StatusSenha.EmAtendimento;
-            senha.GuicheId = guicheId;
+            senha.UsuarioId = UsuarioId; // id do atendente logado
             senha.DataChamada = DateTime.UtcNow;
+            senha.Status = StatusSenha.EmAtendimento;
+            
 
             try
             {
@@ -116,11 +117,34 @@ namespace Senhas.Controllers
         [HttpPost]
         public async Task<IActionResult> Finalizar(int senhaId)
         {
+            var usuarioId = UsuarioId;
+            var usuarioNome = UsuarioNome;
+
+            var guichesUsuario = _context.UsuariosGuiches
+                .Where(x => x.UsuarioId == usuarioId)
+                .Select(x => x.GuicheId)
+                .ToList();
+
+            if (!guichesUsuario.Any())
+            {
+                TempData["Mensagem"] = "Usuário não está vinculado a nenhum guichê!";
+                return RedirectToAction("Index");
+            }
+
+            var guicheId = guichesUsuario.First();
+
+
+
             var senha = _context.Senhas.Find(senhaId);
             if (senha == null)
                 return NotFound();
 
+            senha.UsuarioId = UsuarioId; // id do atendente logado
+            senha.DataChamada = DateTime.UtcNow;
             senha.Status = StatusSenha.Finalizada;
+            _context.SaveChanges();
+
+
             _context.SaveChanges();
 
             await _auditoria.RegistrarAsync(

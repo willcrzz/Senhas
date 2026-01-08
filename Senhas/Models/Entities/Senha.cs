@@ -14,10 +14,14 @@ namespace Senhas.Models.Entities
 
         public DateTime DataCriacao { get; set; } = DateTime.UtcNow;
         public DateTime? DataChamada { get; set; }
+        public DateTime? DataFinalizacao { get; set; } // opcional se quiser calcular tempo de atendimento
 
         public int? GuicheId { get; set; }
         public Guiche? Guiche { get; set; }
 
+        public int? UsuarioId { get; set; } // atendente
+        public Usuario? Usuario { get; set; } // navegação
     }
+    
 }
 

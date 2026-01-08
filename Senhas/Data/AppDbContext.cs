@@ -40,6 +40,12 @@ public class AppDbContext : DbContext
             .WithMany(x => x.UsuarioGuiches)
             .HasForeignKey(x => x.GuicheId);
 
+        modelBuilder.Entity<Senha>()
+            .HasOne(s => s.Usuario)
+            .WithMany()
+            .HasForeignKey(s => s.UsuarioId);
+
+
     }
 
 

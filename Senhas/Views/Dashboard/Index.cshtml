@@ -1,0 +1,137 @@
+﻿@{
+    ViewData["Title"] = "Dashboard Dinâmico";
+    var usuarios = ViewBag.Usuarios as List<Senhas.Models.Entities.Usuario>;
+    var guiches = ViewBag.Guiches as List<Senhas.Models.Entities.Guiche>;
+}
+
+<h1>Dashboard Dinâmico</h1>
+
+<div class="filtros-container">
+    <label>Início:</label>
+    <input type="date" id="filtroInicio" />
+    <label>Fim:</label>
+    <input type="date" id="filtroFim" />
+
+    <label>Atendente:</label>
+    <select id="filtroUsuario">
+        <option value="">Todos</option>
+        @foreach (var u in usuarios)
+        {
+            <option value="@u.Id">@u.Nome @u.Sobrenome</option>
+        }
+    </select>
+
+    <label>Guichê:</label>
+    <select id="filtroGuiche">
+        <option value="">Todos</option>
+        @foreach (var g in guiches)
+        {
+            <option value="@g.Id">@g.Nome</option>
+        }
+    </select>
+
+    <button onclick="atualizarDashboard()">Filtrar</button>
+</div>
+
+<div style="width: 80%; margin: 30px auto;">
+    <canvas id="senhasChart"></canvas>
+</div>
+
+<div style="width: 80%; margin: 30px auto;">
+    <canvas id="tempoChart"></canvas>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+
+<script>
+    let senhasChart, tempoChart;
+
+    function atualizarDashboard() {
+        const inicio = $('#filtroInicio').val();
+        const fim = $('#filtroFim').val();
+        const usuarioId = $('#filtroUsuario').val();
+        const guicheId = $('#filtroGuiche').val();
+
+        $.get('/Dashboard/ObterDados', { inicio, fim, usuarioId, guicheId }, function(dados) {
+            const labels = dados.map(d => d.atendente);
+            const quantidadeData = dados.map(d => d.quantidadeSenhas);
+            const tempoEsperaData = dados.map(d => Math.round(d.tempoMedioEspera));
+            const tempoAtendimentoData = dados.map(d => Math.round(d.tempoMedioAtendimento));
+
+            // Senhas Chart
+            if(senhasChart) senhasChart.destroy();
+            const ctx1 = document.getElementById('senhasChart').getContext('2d');
+            senhasChart = new Chart(ctx1, {
+                type: 'bar',
+                data: { labels: labels, datasets: [{ label: 'Senhas Atendidas', data: quantidadeData, backgroundColor: '#007bff' }] },
+                options: { responsive: true, plugins: { title: { display: true, text: 'Senhas Atendidas por Atendente' }, legend: { display: false } } }
+            });
+
+            // Tempo Chart
+            if(tempoChart) tempoChart.destroy();
+            const ctx2 = document.getElementById('tempoChart').getContext('2d');
+            tempoChart = new Chart(ctx2, {
+                type: 'line',
+                data: {
+                    labels: labels,
+                    datasets: [
+                        { label: 'Tempo Médio de Espera (min)', data: tempoEsperaData, borderColor: '#28a745', backgroundColor: 'rgba(40, 167, 69,0.2)', tension: 0.3 },
+                        { label: 'Tempo Médio de Atendimento (min)', data: tempoAtendimentoData, borderColor: '#ffc107', backgroundColor: 'rgba(255, 193, 7,0.2)', tension: 0.3 }
+                    ]
+                },
+                options: { responsive: true, plugins: { title: { display: true, text: 'Tempo Médio por Atendente' } }, scales: { y: { beginAtZero: true } } }
+            });
+        });
+    }
+
+    // Atualiza ao carregar a página
+    $(document).ready(function() {
+        atualizarDashboard();
+    });
+</script>
+
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        background: #f0f2f5;
+        padding: 20px;
+    }
+
+    h1 {
+        text-align: center;
+        margin-bottom: 30px;
+        color: #333;
+    }
+
+    .filtros-container {
+        display: flex;
+        justify-content: center;
+        gap: 10px;
+        flex-wrap: wrap;
+        margin-bottom: 20px;
+    }
+
+        .filtros-container label {
+            margin-right: 5px;
+            font-weight: bold;
+        }
+
+        .filtros-container input, .filtros-container select, .filtros-container button {
+            padding: 6px 10px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+        }
+
+        .filtros-container button {
+            background: #007bff;
+            color: #fff;
+            border: none;
+            cursor: pointer;
+            transition: 0.25s;
+        }
+
+            .filtros-container button:hover {
+                background: #0056b3;
+            }
+</style>
