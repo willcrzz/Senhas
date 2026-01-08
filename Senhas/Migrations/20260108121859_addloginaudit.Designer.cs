@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -10,9 +11,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Senhas.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260108121859_addloginaudit")]
+    partial class addloginaudit
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -21,7 +24,7 @@ namespace Senhas.Migrations
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
-            modelBuilder.Entity("Senhas.Models.Entities.AuditoriaSistema", b =>
+            modelBuilder.Entity("Senhas.Models.Entities.AuditoriaLogins", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -29,19 +32,8 @@ namespace Senhas.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
-                    b.Property<string>("Acao")
-                        .IsRequired()
-                        .HasColumnType("text");
-
                     b.Property<DateTime>("DataHora")
                         .HasColumnType("timestamp with time zone");
-
-                    b.Property<string>("Entidade")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<int?>("EntidadeId")
-                        .HasColumnType("integer");
 
                     b.Property<string>("Ip")
                         .IsRequired()
@@ -55,11 +47,12 @@ namespace Senhas.Migrations
                         .HasColumnType("integer");
 
                     b.Property<string>("UsuarioLogin")
+                        .IsRequired()
                         .HasColumnType("text");
 
                     b.HasKey("Id");
 
-                    b.ToTable("AuditoriaSistema");
+                    b.ToTable("AuditoriaLogins");
                 });
 
             modelBuilder.Entity("Senhas.Models.Entities.Guiche", b =>

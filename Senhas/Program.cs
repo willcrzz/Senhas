@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using Senhas.Models.Entities;
 using Senhas.Models.Enums;
+using Senhas.Services;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -8,7 +9,9 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 builder.Services.AddSession();
-
+builder.Services.AddHttpContextAccessor();
+builder.Services.AddScoped<AuditoriaService>();
+builder.Services.AddScoped<BaseControllerUserGetter>();
 // Banco PostgreSQL
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));

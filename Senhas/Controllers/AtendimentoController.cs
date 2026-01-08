@@ -2,16 +2,19 @@
 using Microsoft.EntityFrameworkCore;
 using Senhas.Models.Entities;
 using Senhas.Models.Enums;
+using Senhas.Services;
 
 namespace Senhas.Controllers
 {
     public class AtendimentoController : BaseController
     {
         private readonly AppDbContext _context;
+        private readonly AuditoriaService _auditoria;
 
-        public AtendimentoController(AppDbContext context)
+        public AtendimentoController(AppDbContext context, AuditoriaService auditoria)
         {
             _context = context;
+            _auditoria = auditoria;
         }
 
         public override void OnActionExecuting(Microsoft.AspNetCore.Mvc.Filters.ActionExecutingContext context)
@@ -31,6 +34,10 @@ namespace Senhas.Controllers
             base.OnActionExecuting(context);
         }
 
+
+       
+
+
         // Tela principal do atendente
         public IActionResult Index()
         {
@@ -49,11 +56,11 @@ namespace Senhas.Controllers
 
         // Chamar próxima senha
         [HttpPost]
-        public IActionResult ChamarProxima()
+        public async Task<IActionResult> ChamarProxima()
         {
             var usuarioId = UsuarioId;
+            var usuarioNome = UsuarioNome;
 
-            // Descobre quais guichês esse usuário pode usar
             var guichesUsuario = _context.UsuariosGuiches
                 .Where(x => x.UsuarioId == usuarioId)
                 .Select(x => x.GuicheId)
@@ -65,7 +72,6 @@ namespace Senhas.Controllers
                 return RedirectToAction("Index");
             }
 
-            // Pega o primeiro guichê do usuário
             var guicheId = guichesUsuario.First();
 
             var senha = _context.Senhas
@@ -88,6 +94,13 @@ namespace Senhas.Controllers
             try
             {
                 _context.SaveChanges();
+
+                await _auditoria.RegistrarAsync(
+                    acao: "CHAMAR SENHA",
+                    entidade: "Senha",
+                    entidadeId: senha.Id
+                    
+                );
             }
             catch (DbUpdateException ex)
             {
@@ -98,9 +111,10 @@ namespace Senhas.Controllers
             return RedirectToAction("Index");
         }
 
+
         // Finalizar atendimento
         [HttpPost]
-        public IActionResult Finalizar(int senhaId)
+        public async Task<IActionResult> Finalizar(int senhaId)
         {
             var senha = _context.Senhas.Find(senhaId);
             if (senha == null)
@@ -109,7 +123,14 @@ namespace Senhas.Controllers
             senha.Status = StatusSenha.Finalizada;
             _context.SaveChanges();
 
+            await _auditoria.RegistrarAsync(
+                acao: "FINALIZAR SENHA",
+                entidade: "Senha",
+                entidadeId: senha.Id
+            );
+
             return RedirectToAction("Index");
         }
-    }
-}
+
+            }
+        }

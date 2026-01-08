@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -10,9 +11,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Senhas.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260108120031_addLoginAudith")]
+    partial class addLoginAudith
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -20,47 +23,6 @@ namespace Senhas.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
-
-            modelBuilder.Entity("Senhas.Models.Entities.AuditoriaSistema", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("Acao")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<DateTime>("DataHora")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<string>("Entidade")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<int?>("EntidadeId")
-                        .HasColumnType("integer");
-
-                    b.Property<string>("Ip")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<string>("Navegador")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<int>("UsuarioId")
-                        .HasColumnType("integer");
-
-                    b.Property<string>("UsuarioLogin")
-                        .HasColumnType("text");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("AuditoriaSistema");
-                });
 
             modelBuilder.Entity("Senhas.Models.Entities.Guiche", b =>
                 {
@@ -80,6 +42,40 @@ namespace Senhas.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Guiches");
+                });
+
+            modelBuilder.Entity("Senhas.Models.Entities.LoginAudit", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("DataHora")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("Ip")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("Navegador")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<bool>("Sucesso")
+                        .HasColumnType("boolean");
+
+                    b.Property<int?>("UsuarioId")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("UsuarioLogin")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("LoginAuditoria");
                 });
 
             modelBuilder.Entity("Senhas.Models.Entities.Senha", b =>

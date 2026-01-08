@@ -10,6 +10,8 @@ public class AppDbContext : DbContext
     public DbSet<Usuario> Usuarios { get; set; }
 
     public DbSet<UsuarioGuiche> UsuariosGuiches { get; set; }
+    public DbSet<AuditoriaSistema> AuditoriaSistema { get; set; }
+
 
 
     public AppDbContext(DbContextOptions<AppDbContext> options)

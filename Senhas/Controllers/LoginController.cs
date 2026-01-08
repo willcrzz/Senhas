@@ -38,33 +38,50 @@ public class LoginController : Controller
             return RedirectToAction("Index");
         }
 
-        // Armazena dados básicos
-        HttpContext.Session.SetInt32("UsuarioId", user.Id);
-        HttpContext.Session.SetString("UsuarioNome", user.Nome);
-        HttpContext.Session.SetString("Perfil", user.Perfil.ToString());
-
-        // Busca guichê do usuário na tabela de vínculo
+        // Busca guichê vinculado
         var guicheUser = await _context.UsuariosGuiches
             .Where(x => x.UsuarioId == user.Id)
             .Select(x => x.GuicheId)
             .FirstOrDefaultAsync();
 
-        // Busca nível do usuário
         var perfil = user.Perfil.ToString().ToLower();
 
-        // Se usuário NÃO é admin e NÃO tem guichê → bloquear
+        // BLOQUEAR atendente sem guichê
         if (perfil != "admin" && guicheUser == 0)
         {
             TempData["Erro"] = "Usuário não possui guichê vinculado! Contate o administrador.";
             return RedirectToAction("Index");
         }
 
-        // Se tem guichê, grava
+        // Salvar sessão
+        HttpContext.Session.SetInt32("UsuarioId", user.Id);
+        HttpContext.Session.SetString("UsuarioNome", $"{user.Nome} {user.Sobrenome}");
+        HttpContext.Session.SetString("Perfil", user.Perfil.ToString());
+
         if (guicheUser > 0)
             HttpContext.Session.SetInt32("GuicheId", guicheUser);
 
+        //  Captura IP
+        var ip = HttpContext.Connection.RemoteIpAddress?.ToString() ?? "Desconhecido";
 
-        
+        //  Captura navegador
+        var navegador = Request.Headers["User-Agent"].ToString();
+
+        //  Gravar auditoria
+        _context.AuditoriaSistema.Add(new AuditoriaSistema
+        {
+            UsuarioId = user.Id,
+            UsuarioLogin = user.Nome, // <-- salva o login
+            DataHora = DateTime.UtcNow,
+            Ip = ip,
+            Navegador = navegador,
+            Acao = "LOGIN",
+            Entidade = "Usuario",
+            EntidadeId = user.Id
+
+        });
+
+        await _context.SaveChangesAsync();
 
         return RedirectToAction("Index", "Home");
     }
@@ -78,7 +95,7 @@ public class LoginController : Controller
 
     // REGISTRAR
     [HttpPost]
-    public async Task<IActionResult> Registrar(string nome, string sobrenome, string cpf, string email,
+    public async Task<IActionResult> Registrar(string nome, string sobrenome, string cpf, String User,string email,
                                                string usuario, string senha, string confirmarSenha)
     {
         if (senha != confirmarSenha)
@@ -107,6 +124,7 @@ public class LoginController : Controller
             Sobrenome = sobrenome,
             Email = email,
             Cpf = cpf,
+            Username = User,
             Senha = senha,
             Confirmado = false,
             TokenConfirmacao = token
