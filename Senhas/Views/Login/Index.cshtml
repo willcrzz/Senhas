@@ -3,18 +3,17 @@
 }
 
 <div class="login-container">
-
-    <!-- Mensagens -->
-    @if (TempData["Erro"] != null)
-    {
-        <div class="alert">@TempData["Erro"]</div>
-    }
-    @if (TempData["Sucesso"] != null)
-    {
-        <div class="success">@TempData["Sucesso"]</div>
-    }
-
     <div class="login-box">
+        <!-- Mensagens -->
+        @if (TempData["Erro"] != null)
+        {
+            <div class="alert">@TempData["Erro"]</div>
+        }
+        @if (TempData["Sucesso"] != null)
+        {
+            <div class="success">@TempData["Sucesso"]</div>
+        }
+
         <h2>Login</h2>
         <form asp-action="Login" method="post" id="loginForm">
             <input type="text" name="usuario" placeholder="Usuário" required />
@@ -164,23 +163,12 @@
     /* ----------------------------
        Mensagens de alerta
     ---------------------------- */
-    .alert {
-        color: #721c24;
-        background-color: #f8d7da;
-        border: 1px solid #f5c6cb;
-        padding: 12px;
-        margin-bottom: 15px;
-        border-radius: 6px;
+    .alert, .success {
+        text-align: center; /* Centraliza o texto */
+        width: 100%; /* Ocupa toda a largura do box */
+        box-sizing: border-box; /* Para não ultrapassar o padding */
     }
 
-    .success {
-        color: #155724;
-        background-color: #d4edda;
-        border: 1px solid #c3e6cb;
-        padding: 12px;
-        margin-bottom: 15px;
-        border-radius: 6px;
-    }
 
     /* ----------------------------
        Modal

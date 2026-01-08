@@ -213,6 +213,7 @@ public class LoginController : Controller
         return RedirectToAction("Index");
     }
 
+
     private async Task EnviarEmailAsync(string para, string assunto, string mensagem)
     {
         var smtpHost = _config["Email:SmtpHost"];

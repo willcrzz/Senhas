@@ -1,0 +1,151 @@
+﻿@{
+    ViewData["Title"] = "Redefinir Senha";
+}
+
+<div class="login-container">
+
+    <div class="login-box">
+        <!-- Mensagens -->
+        @if (TempData["Erro"] != null)
+        {
+            <div class="alert">@TempData["Erro"]</div>
+        }
+        @if (TempData["Sucesso"] != null)
+        {
+            <div class="success">@TempData["Sucesso"]</div>
+        }
+
+        <h2>Redefinir Senha</h2>
+
+        <!-- Formulário POST para RedefinirSenhaConfirmar -->
+        <form asp-action="RedefinirSenhaConfirmar" method="post" id="redefinirForm">
+            <!-- Token escondido -->
+            <input type="hidden" name="token" value="@ViewBag.Token" />
+
+            <input type="password" name="novaSenha" id="novaSenha" placeholder="Nova Senha" required pattern=".{6,}" title="Mínimo 6 caracteres" />
+            <input type="password" name="confirmarSenha" id="confirmarSenha" placeholder="Confirmar Senha" required pattern=".{6,}" title="Mínimo 6 caracteres" />
+
+            <button type="submit">Redefinir Senha</button>
+
+            <p>
+                <a href="/Login/Index">Voltar ao Login</a>
+            </p>
+        </form>
+    </div>
+</div>
+
+
+<script>
+    // Validação de confirmação de senha
+    document.getElementById('redefinirForm').addEventListener('submit', function(e) {
+        const novaSenha = document.getElementById('novaSenha').value;
+        const confirmarSenha = document.getElementById('confirmarSenha').value;
+
+        if (novaSenha !== confirmarSenha) {
+            e.preventDefault(); // Impede envio do formulário
+            alert('As senhas não coincidem!');
+        }
+    });
+</script>
+
+<style>
+    /* ----------------------------
+           Reset e fonte
+        ---------------------------- */
+    body {
+        font-family: Arial, sans-serif;
+        background: #f0f2f5;
+        margin: 0;
+        padding: 0;
+    }
+
+    /* ----------------------------
+           Container central
+        ---------------------------- */
+    .login-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+    }
+
+    /* ----------------------------
+           Box login
+        ---------------------------- */
+    .login-box {
+        background: #fff;
+        padding: 40px 50px;
+        border-radius: 12px;
+        box-shadow: 0 6px 20px rgba(0,0,0,0.3);
+        width: 350px;
+        text-align: center;
+    }
+
+        .login-box h2 {
+            margin-bottom: 25px;
+            color: #333;
+        }
+
+        .login-box input {
+            width: 100%;
+            padding: 12px;
+            margin-bottom: 15px;
+            border-radius: 6px;
+            border: 1px solid #ccc;
+            box-sizing: border-box;
+            font-size: 14px;
+        }
+
+        .login-box button {
+            width: 100%;
+            padding: 12px;
+            background: #007bff;
+            border: none;
+            color: #fff;
+            font-size: 16px;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+            .login-box button:hover {
+                background: #0056b3;
+            }
+
+        .login-box p {
+            font-size: 14px;
+            margin-top: 10px;
+        }
+
+        .login-box a {
+            color: #007bff;
+            text-decoration: none;
+        }
+
+            .login-box a:hover {
+                text-decoration: underline;
+            }
+
+    /* ----------------------------
+           Mensagens de alerta
+        ---------------------------- */
+    .alert {
+        color: #721c24;
+        background-color: #f8d7da;
+        border: 1px solid #f5c6cb;
+        padding: 12px;
+        margin-bottom: 15px;
+        border-radius: 6px;
+        text-align: center;
+    }
+
+    .success {
+        color: #155724;
+        background-color: #d4edda;
+        border: 1px solid #c3e6cb;
+        padding: 12px;
+        margin-bottom: 15px;
+        border-radius: 6px;
+        text-align: center;
+    }
+</style>
