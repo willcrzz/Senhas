@@ -90,7 +90,8 @@ namespace Senhas.Controllers
             senha.UsuarioId = UsuarioId; // id do atendente logado
             senha.DataChamada = DateTime.UtcNow;
             senha.Status = StatusSenha.EmAtendimento;
-            
+            senha.GuicheId = guicheId;
+
 
             try
             {
@@ -140,13 +141,12 @@ namespace Senhas.Controllers
                 return NotFound();
 
             senha.UsuarioId = UsuarioId; // id do atendente logado
-            senha.DataChamada = DateTime.UtcNow;
+            senha.DataFinalizacao = DateTime.UtcNow;
             senha.Status = StatusSenha.Finalizada;
+            senha.GuicheId = guicheId;
             _context.SaveChanges();
 
-
-            _context.SaveChanges();
-
+            
             await _auditoria.RegistrarAsync(
                 acao: "FINALIZAR SENHA",
                 entidade: "Senha",
