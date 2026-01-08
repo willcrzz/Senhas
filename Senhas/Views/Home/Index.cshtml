@@ -9,94 +9,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sistema de Senhas</title>
 
-    <!-- CSS -->
-    <style>
-        :root {
-            --cor-primaria: #000000;
-            --cor-secundaria: #F6F6F6;
-            --cor-terciaria: #22D4FD;
-            --cor-hover: #22D4FD;
-            --fonte-primaria: 'Krona One', sans-serif;
-            --fonte-secundaria: 'Montserrat', sans-serif;
-        }
-
-        * {
-            margin: 0;
-            padding: 0;
-        }
-
-        body {
-            box-sizing: border-box;
-            background-color: var(--cor-primaria);
-            color: var(--cor-secundaria);
-        }
-
-        .cabecalho {
-            padding: 2% 0% 0% 15%;
-            text-align: left;
-        }
-
-        .cabecalho__menu {
-            display: flex;
-            gap: 80px;
-        }
-
-        .cabecalho__menu__link {
-            font-family: var(--fonte-secundaria);
-            font-size: 1.5rem;
-            font-weight: 600;
-            color: var(--cor-terciaria);
-            text-decoration: none;
-        }
-
-        .apresentacao {
-            padding: 5% 15%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            text-align: center;
-        }
-
-        .apresentacao__conteudo {
-            width: 50%;
-            display: flex;
-            flex-direction: column;
-            gap: 40px;
-        }
-
-        .apresentacao__conteudo__titulo {
-            font-size: 2.25rem;
-            font-family: var(--fonte-primaria);
-        }
-
-        .apresentacao__links {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 32px;
-            margin-bottom: 50px;
-        }
-
-        .apresentacao__links__navegacao {
-            display: flex;
-            justify-content: center;
-            border: 2px solid var(--cor-terciaria);
-            width: 50%;
-            border-radius: 8px;
-            font-size: 1.5rem;
-            font-weight: 600;
-            padding: 21.5px 0;
-            text-decoration: none;
-            color: var(--cor-secundaria);
-            font-family: var(--fonte-secundaria);
-            transition: transform 0.2s ease, background-color 0.2s ease;
-        }
-
-            .apresentacao__links__navegacao:hover {
-                background-color: var(--cor-hover);
-                transform: scale(1.03);
-            }
-    </style>
+   
 </head>
 
 <body>
@@ -104,6 +17,7 @@
     <header class="cabecalho">
         <nav class="cabecalho__menu">
             <a class="cabecalho__menu__link" href="/Home/Index">Home</a>
+            <a class="cabecalho__menu__link" href="/Dashboard/Index">Dashboard</a>
         </nav>
     </header>
 
@@ -131,3 +45,92 @@
 
 </body>
 </html>
+
+<!-- CSS -->
+<style>
+    :root {
+        --cor-primaria: #000000;
+        --cor-secundaria: #F6F6F6;
+        --cor-terciaria: #22D4FD;
+        --cor-hover: #22D4FD;
+        --fonte-primaria: 'Krona One', sans-serif;
+        --fonte-secundaria: 'Montserrat', sans-serif;
+    }
+
+    * {
+        margin: 0;
+        padding: 0;
+    }
+
+    body {
+        box-sizing: border-box;
+        background-color: var(--cor-primaria);
+        color: var(--cor-secundaria);
+    }
+
+    .cabecalho {
+        padding: 2% 0% 0% 15%;
+        text-align: left;
+    }
+
+    .cabecalho__menu {
+        display: flex;
+        gap: 80px;
+    }
+
+    .cabecalho__menu__link {
+        font-family: var(--fonte-secundaria);
+        font-size: 1.5rem;
+        font-weight: 600;
+        color: var(--cor-terciaria);
+        text-decoration: none;
+    }
+
+    .apresentacao {
+        padding: 5% 15%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+    }
+
+    .apresentacao__conteudo {
+        width: 50%;
+        display: flex;
+        flex-direction: column;
+        gap: 40px;
+    }
+
+    .apresentacao__conteudo__titulo {
+        font-size: 2.25rem;
+        font-family: var(--fonte-primaria);
+    }
+
+    .apresentacao__links {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 32px;
+        margin-bottom: 50px;
+    }
+
+    .apresentacao__links__navegacao {
+        display: flex;
+        justify-content: center;
+        border: 2px solid var(--cor-terciaria);
+        width: 50%;
+        border-radius: 8px;
+        font-size: 1.5rem;
+        font-weight: 600;
+        padding: 21.5px 0;
+        text-decoration: none;
+        color: var(--cor-secundaria);
+        font-family: var(--fonte-secundaria);
+        transition: transform 0.2s ease, background-color 0.2s ease;
+    }
+
+        .apresentacao__links__navegacao:hover {
+            background-color: var(--cor-hover);
+            transform: scale(1.03);
+        }
+</style>

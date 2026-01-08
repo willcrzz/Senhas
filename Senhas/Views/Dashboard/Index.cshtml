@@ -3,8 +3,14 @@
     var usuarios = ViewBag.Usuarios as List<Senhas.Models.Entities.Usuario>;
     var guiches = ViewBag.Guiches as List<Senhas.Models.Entities.Guiche>;
 }
-
-<h1>Dashboard Dinâmico</h1>
+<body>
+<header class="cabecalho">
+    <nav class="cabecalho__menu">
+        <a class="cabecalho__menu__link" href="/Home/Index">Home</a>
+        
+    </nav>
+</header>
+<h1>Dashboard </h1>
 
 <div class="filtros-container">
     <label>Início:</label>
@@ -40,7 +46,7 @@
 <div style="width: 80%; margin: 30px auto;">
     <canvas id="tempoChart"></canvas>
 </div>
-
+</body>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 
@@ -92,13 +98,47 @@
 </script>
 
 <style>
+    :root {
+        --cor-primaria: #FCF8F8;
+        --cor-secundaria: #FBEFEF;
+        --cor-terciaria: #F9DFDF;
+        --cor-quarta: #22D4FD;
+        --cor-hover: #F5AFAF;
+        --fonte-primaria: 'Krona One', sans-serif;
+        --fonte-secundaria: 'Montserrat', sans-serif;
+    }
+
+    * {
+        margin: 0;
+        padding: 0;
+    }
+
     body {
-        font-family: Arial, sans-serif;
-        background: #f0f2f5;
-        padding: 20px;
+        box-sizing: border-box;
+        background-color: var(--cor-primaria);
+        color: var(--cor-secundaria);
+    }
+
+    .cabecalho {
+        padding: 2% 0% 0% 15%;
+        text-align: left;
+    }
+
+    .cabecalho__menu {
+        display: flex;
+        gap: 80px;
+    }
+
+    .cabecalho__menu__link {
+        font-family: var(--fonte-secundaria);
+        font-size: 1.5rem;
+        font-weight: 600;
+        color: var(--cor-quarta);
+        text-decoration: none;
     }
 
     h1 {
+        font-family: var(--fonte-primaria);
         text-align: center;
         margin-bottom: 30px;
         color: #333;

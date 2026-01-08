@@ -3,7 +3,13 @@
     ViewData["Title"] = "Administração de Usuários";
     var guiches = ViewBag.Guiches as List<Senhas.Models.Entities.Guiche>;
 }
-
+<body>
+<header class="cabecalho">
+    <nav class="cabecalho__menu">
+        <a class="cabecalho__menu__link" href="/Home/Index">Home</a>
+        <a class="cabecalho__menu__link" href="/Dashboard/Index">Dashboard</a>
+    </nav>
+</header>
 <div class="admin-container">
 
     <h2>Administração de Usuários</h2>
@@ -16,34 +22,34 @@
     <div class="admin-table">
         <table>
             <thead>
-                <tr>
-                    <th>Nome</th>
-                    <th>Email</th>
-                    <th>Guichês</th>
-                    <th>Ação</th>
-                </tr>
+            <tr>
+                <th>Nome</th>
+                <th>Email</th>
+                <th>Guichês</th>
+                <th>Ação</th>
+            </tr>
             </thead>
             <tbody>
-                @foreach (var usuario in Model)
-                {
-                    <tr>
-                        <td>@usuario.Nome @usuario.Sobrenome</td>
-                        <td>@usuario.Email</td>
-                        <td>
-                            @if (usuario.UsuarioGuiches.Any())
-                            {
-                                @string.Join(", ", usuario.UsuarioGuiches.Select(ug => ug.Guiche.Nome))
-                            }
-                            else
-                            {
-                                <span>—</span>
-                            }
-                        </td>
-                        <td>
-                            <button class="btn-edit" onclick="openModal('modal-@usuario.Id')">Editar Guichês</button>
-                        </td>
-                    </tr>
-                }
+            @foreach (var usuario in Model)
+            {
+                <tr>
+                    <td>@usuario.Nome @usuario.Sobrenome</td>
+                    <td>@usuario.Email</td>
+                    <td>
+                        @if (usuario.UsuarioGuiches.Any())
+                        {
+                            @string.Join(", ", usuario.UsuarioGuiches.Select(ug => ug.Guiche.Nome))
+                        }
+                        else
+                        {
+                            <span>—</span>
+                        }
+                    </td>
+                    <td>
+                        <button class="btn-edit" onclick="openModal('modal-@usuario.Id')">Editar Guichês</button>
+                    </td>
+                </tr>
+            }
             </tbody>
         </table>
     </div>
@@ -56,16 +62,16 @@
                 <span class="close" onclick="closeModal('modal-@usuario.Id')">&times;</span>
                 <h3>Editar Guichês - @usuario.Nome</h3>
                 <form asp-action="AtualizarGuiches" method="post">
-                    <input type="hidden" name="usuarioId" value="@usuario.Id" />
+                    <input type="hidden" name="usuarioId" value="@usuario.Id"/>
                     <div class="checkbox-group">
                         @foreach (var guiche in guiches)
                         {
                             var selecionado = usuario.UsuarioGuiches.Any(ug => ug.GuicheId == guiche.Id) ? "checked" : "";
                             <label class="checkbox-label">
-                                <input type="checkbox" name="guichesSelecionados" value="@guiche.Id" @selecionado />
+                                <input type="checkbox" name="guichesSelecionados" value="@guiche.Id" @selecionado/>
                                 @guiche.Nome
                             </label>
-                            <br />
+                            <br/>
                         }
                     </div>
                     <button type="submit" class="btn-save">Salvar</button>
@@ -74,7 +80,7 @@
         </div>
     }
 </div>
-
+</body>
 <script>
     function openModal(id) {
         document.getElementById(id).style.display = 'block';
@@ -97,18 +103,42 @@
 
 
 <style>
-    /* Base geral */
     :root {
         --cor-primaria: #000000;
-        --cor-secundaria: #ffffff;
+        --cor-secundaria: #F6F6F6;
         --cor-terciaria: #22D4FD;
-        --fonte: 'Montserrat', Arial, sans-serif;
+        --cor-hover: #22D4FD;
+        --fonte-primaria: 'Krona One', sans-serif;
+        --fonte-secundaria: 'Montserrat', sans-serif;
     }
 
     * {
         margin: 0;
         padding: 0;
+    }
+
+    body {
         box-sizing: border-box;
+        background-color: var(--cor-primaria);
+        color: var(--cor-secundaria);
+    }
+
+    .cabecalho {
+        padding: 2% 0% 0% 15%;
+        text-align: left;
+    }
+
+    .cabecalho__menu {
+        display: flex;
+        gap: 80px;
+    }
+
+    .cabecalho__menu__link {
+        font-family: var(--fonte-secundaria);
+        font-size: 1.5rem;
+        font-weight: 600;
+        color: var(--cor-terciaria);
+        text-decoration: none;
     }
 
     .admin-container {
