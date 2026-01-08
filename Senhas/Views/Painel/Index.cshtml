@@ -18,6 +18,8 @@
 <div class="painel-container">
     <div class="painel-header">
         <h1>Senha Atual</h1>
+        <h3 class="painel-container-tempomedio-h3"> Tempo médio de espera: <span>@ViewBag.TempoMedioEspera</span></h3>
+        
     </div>
 
     @if (ultima != null)
@@ -31,9 +33,10 @@
             </div>
         </div>
     }
-
+    
     <div class="painel-historico">
         <h3>Últimas Chamadas</h3>
+        
 
         <table class="painel-tabela">
             <thead>
@@ -169,4 +172,19 @@
         .painel-tabela tbody tr:nth-child(odd) {
             background-color: #0f0f0f;
         }
+
+    .painel-container-tempomedio-h3 {
+        font-size: 2rem;
+        font-weight: bold;
+        color: #22D4FD;
+        background-color: rgba(0, 0, 0, 0.6);
+        padding: 10px 20px;
+        border-radius: 8px;
+        display: inline-block;
+        margin-bottom: 20px;
+        box-shadow: 0 4px 8px rgba(0,0,0,0.4);
+       
+    }
+
+
 </style>
