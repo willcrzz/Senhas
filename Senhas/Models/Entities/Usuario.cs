@@ -30,6 +30,7 @@ namespace Senhas.Models.Entities
 
         public PerfilUsuario Perfil { get; set; } = PerfilUsuario.Normal;
 
+
         // Guichês atribuídos
         public List<UsuarioGuiche> UsuarioGuiches { get; set; }
 

@@ -81,6 +81,7 @@ public class LoginController : Controller
             UsuarioLogin = user.Nome,
             DataHora = DateTime.UtcNow,
             Ip = ip,
+            Hostname = Dns.GetHostName(),
             Navegador = navegador,
             Acao = "LOGIN",
             Entidade = "Usuario",

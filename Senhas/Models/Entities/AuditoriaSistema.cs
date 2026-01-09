@@ -14,6 +14,8 @@ namespace Senhas.Models.Entities
 
         public string Ip { get; set; }
 
+        public string? Hostname { get; set; }
+
         public string Navegador { get; set; }
 
         

@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Senhas.Models.Entities;
 using System;
+using System.Net;
 using System.Threading.Tasks;
 
 namespace Senhas.Services
@@ -18,7 +19,7 @@ namespace Senhas.Services
             _userGetter = userGetter;
         }
 
-        public async Task RegistrarAsync(string acao, string entidade = null, int? entidadeId = null)
+        public async Task RegistrarAsync(string acao,string entidade = null, int? entidadeId = null)
         {
 
             var http = _httpContextAccessor.HttpContext;
@@ -29,6 +30,7 @@ namespace Senhas.Services
                 UsuarioLogin = _userGetter.UsuarioLogin,
                 DataHora = DateTime.UtcNow,
                 Ip = http?.Connection?.RemoteIpAddress?.ToString(),
+                Hostname = Dns.GetHostName(),
                 Navegador = http?.Request?.Headers["User-Agent"].ToString(),
                 Acao = acao,
                 Entidade = entidade,
