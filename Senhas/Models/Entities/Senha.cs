@@ -12,9 +12,10 @@ namespace Senhas.Models.Entities
 
         public StatusSenha Status { get; set; } = StatusSenha.Aguardando;
 
-        public DateTime DataCriacao { get; set; } = DateTime.UtcNow;
-        public DateTime? DataChamada { get; set; }
-        public DateTime? DataFinalizacao { get; set; } // opcional se quiser calcular tempo de atendimento
+        public DateTimeOffset DataCriacao { get; set; }
+        public DateTimeOffset? DataChamada { get; set; }
+        public DateTimeOffset? DataFinalizacao { get; set; }
+
 
         public int? GuicheId { get; set; }
         public Guiche? Guiche { get; set; }
@@ -22,6 +23,9 @@ namespace Senhas.Models.Entities
         public int? UsuarioId { get; set; } // atendente
         public Usuario? Usuario { get; set; } // navegação
     }
+
     
-}
+
+
+    }
 

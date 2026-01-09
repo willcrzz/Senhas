@@ -45,7 +45,31 @@ public class AppDbContext : DbContext
             .WithMany()
             .HasForeignKey(s => s.UsuarioId);
 
+        
+        foreach (var entityType in modelBuilder.Model.GetEntityTypes())
+        {
+            foreach (var property in entityType.GetProperties()
+                         .Where(p => p.ClrType == typeof(DateTime) || p.ClrType == typeof(DateTime?)))
+            {
+                var converterNonNullable =
+                    new Microsoft.EntityFrameworkCore.Storage.ValueConversion.ValueConverter<DateTime, DateTime>(
+                        v => v, // salva sem alterar
+                        v => DateTime.SpecifyKind(v, DateTimeKind.Local) // lê como Local
+                    );
 
+                var converterNullable =
+                    new Microsoft.EntityFrameworkCore.Storage.ValueConversion.ValueConverter<DateTime?, DateTime?>(
+                        v => v,
+                        v => v.HasValue ? DateTime.SpecifyKind(v.Value, DateTimeKind.Local) : v
+                    );
+
+                if (property.ClrType == typeof(DateTime))
+                    property.SetValueConverter(converterNonNullable);
+                else
+                    property.SetValueConverter(converterNullable);
+            }
+        }
+       
     }
 
 
