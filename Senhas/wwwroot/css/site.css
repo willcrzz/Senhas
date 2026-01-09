@@ -1,22 +1,102 @@
-html {
-  font-size: 14px;
+:root {
+    --cor-primaria: #000000;
+    --cor-secundaria: #ffffff;
+    --cor-terciaria: #22D4FD;
+    --cor-hover: #1bb9dd;
+    --fonte: 'Montserrat', Arial, sans-serif;
 }
 
-@media (min-width: 768px) {
-  html {
-    font-size: 16px;
-  }
-}
-
-.btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
-  box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
-}
-
-html {
-  position: relative;
-  min-height: 100%;
+/* Reset */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
 }
 
 body {
-  margin-bottom: 60px;
+    background-color: var(--cor-primaria);
+    color: var(--cor-secundaria);
+    font-family: var(--fonte);
+}
+
+/* ---------------- NAVBAR ---------------- */
+.navbar {
+    background-color: rgba(0, 0, 0, 0.95) !important;
+    border-bottom: 1px solid rgba(34, 212, 253, 0.25);
+}
+
+.navbar-brand {
+    color: var(--cor-terciaria) !important;
+    font-weight: 800;
+    letter-spacing: 1px;
+}
+
+.navbar-toggler {
+    border-color: var(--cor-secundaria);
+}
+
+.navbar-toggler-icon {
+    filter: invert(1);
+}
+
+.nav-link {
+    font-size: 1.15rem;
+    font-weight: 600;
+    color: var(--cor-secundaria) !important;
+    padding: 8px 12px;
+    border-radius: 6px;
+    transition: 0.25s ease;
+}
+
+    .nav-link:hover {
+        background-color: var(--cor-terciaria);
+        color: #000 !important;
+    }
+
+/* ---------------- BOTÕES ---------------- */
+.btn-primary {
+    background-color: var(--cor-terciaria) !important;
+    color: #000 !important;
+    border: none;
+    font-weight: bold;
+    transition: 0.2s;
+}
+
+    .btn-primary:hover {
+        background-color: var(--cor-hover) !important;
+        transform: scale(1.03);
+    }
+
+/* ---------------- TITULOS ---------------- */
+h1, h2, h3, h4 {
+    color: var(--cor-terciaria);
+    font-weight: 800;
+}
+
+/* ---------------- CARDS ---------------- */
+.card {
+    background-color: #0b0b0b;
+    border: 1px solid rgba(255,255,255,0.15);
+    border-radius: 12px;
+    color: var(--cor-secundaria);
+}
+
+    .card:hover {
+        border-color: var(--cor-terciaria);
+    }
+
+/* ---------------- TABELAS ---------------- */
+table {
+    color: var(--cor-secundaria);
+}
+
+    table thead {
+        background-color: #0e0e0e;
+        border-bottom: 2px solid var(--cor-terciaria);
+    }
+
+/* Rodapé */
+footer {
+    color: rgba(255,255,255,0.5);
+    border-top: 1px solid rgba(255,255,255,0.1);
 }

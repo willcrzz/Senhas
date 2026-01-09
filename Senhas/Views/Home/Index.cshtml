@@ -1,5 +1,5 @@
 ﻿@{
-    Layout = null;
+    Layout = "_Layout";
 }
 <!DOCTYPE html>
 <html lang="pt-br">
@@ -14,12 +14,12 @@
 
 <body>
 
-    <header class="cabecalho">
+   @*  <header class="cabecalho">
         <nav class="cabecalho__menu">
             <a class="cabecalho__menu__link" href="/Home/Index">Home</a>
             <a class="cabecalho__menu__link" href="/Dashboard/Index">Dashboard</a>
         </nav>
-    </header>
+    </header> *@
 
     <main class="apresentacao">
         <section class="apresentacao__conteudo">
@@ -48,44 +48,17 @@
 
 <!-- CSS -->
 <style>
+   
+
     :root {
         --cor-primaria: #000000;
         --cor-secundaria: #F6F6F6;
         --cor-terciaria: #22D4FD;
         --cor-hover: #22D4FD;
+        --cor-quarta: #1581BF;
         --fonte-primaria: 'Krona One', sans-serif;
         --fonte-secundaria: 'Montserrat', sans-serif;
     }
-
-    * {
-        margin: 0;
-        padding: 0;
-    }
-
-    body {
-        box-sizing: border-box;
-        background-color: var(--cor-primaria);
-        color: var(--cor-secundaria);
-    }
-
-    .cabecalho {
-        padding: 2% 0% 0% 15%;
-        text-align: left;
-    }
-
-    .cabecalho__menu {
-        display: flex;
-        gap: 80px;
-    }
-
-    .cabecalho__menu__link {
-        font-family: var(--fonte-secundaria);
-        font-size: 1.5rem;
-        font-weight: 600;
-        color: var(--cor-terciaria);
-        text-decoration: none;
-    }
-
     .apresentacao {
         padding: 5% 15%;
         display: flex;
@@ -124,7 +97,7 @@
         font-weight: 600;
         padding: 21.5px 0;
         text-decoration: none;
-        color: var(--cor-secundaria);
+        color: var(--cor-quarta);
         font-family: var(--fonte-secundaria);
         transition: transform 0.2s ease, background-color 0.2s ease;
     }
