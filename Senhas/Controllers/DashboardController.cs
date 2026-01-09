@@ -1,16 +1,30 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.EntityFrameworkCore;
 using Senhas.Models.Entities;
 
 namespace Senhas.Controllers
 {
+    
     public class DashboardController : BaseController
     {
+       
         private readonly AppDbContext _context;
 
         public DashboardController(AppDbContext context)
         {
             _context = context;
+        }
+
+        public override void OnActionExecuting(ActionExecutingContext context)
+        {
+            base.OnActionExecuting(context);
+
+            if (!IsAdmin)
+            {
+                context.Result = new RedirectToActionResult("AcessoNegado", "Home", null);
+                return;
+            }
         }
 
         // Página principal

@@ -63,7 +63,6 @@ using (var scope = app.Services.CreateScope())
         {
             Nome = adminCfg["Nome"] ?? "Administrador",
             Sobrenome = adminCfg["Sobrenome"] ?? "Sistema",
-            Username = adminCfg["UserName"] ?? "admin",
             Senha = adminCfg["Password"] ?? "123",
             Email = adminCfg["Email"] ?? "admin@sistema.local",
             Cpf = adminCfg["Cpf"] ?? "00000000000",

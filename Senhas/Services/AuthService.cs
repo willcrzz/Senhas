@@ -12,26 +12,30 @@ public class AuthService
         _config = config;
     }
 
-    public async Task<Usuario?> LoginAsync(string usuario, string senha)
+    public async Task<Usuario?> LoginAsync(string email, string senha)
     {
-        // Tenta no banco
+        // Normaliza email
+        var emailLower = email?.Trim().ToLower();
+
+        // Busca no banco por email e senha
         var userDb = await _context.Usuarios
-            .FirstOrDefaultAsync(u => u.Nome == usuario && u.Senha == senha);
+            .FirstOrDefaultAsync(u => u.Email.ToLower() == emailLower && u.Senha == senha);
 
         if (userDb != null)
             return userDb;
 
-        // Usuário padrão do appsettings
+        // Usuário administrador padrão via appsettings
         var usuarioPadrao = _config["Auth:UsuarioPadrao"];
         var senhaPadrao = _config["Auth:SenhaPadrao"];
 
-        if (usuario == usuarioPadrao && senha == senhaPadrao)
+        if (emailLower == usuarioPadrao?.ToLower() && senha == senhaPadrao)
         {
             return new Usuario
             {
                 Id = 0,
                 Nome = usuarioPadrao,
-                Senha = senhaPadrao,
+                Sobrenome = "Padrão",
+                Email = usuarioPadrao,
                 Confirmado = true
             };
         }

@@ -2,20 +2,22 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Senhas.Models.Enums;
-using System.Security.Claims;
 
 public class BaseController : Controller
 {
     public override void OnActionExecuting(ActionExecutingContext context)
     {
-        // Ignorar tela de login
-        if (context.RouteData.Values["controller"]?.ToString() == "Login")
+        var controller = context.RouteData.Values["controller"]?.ToString();
+        var action = context.RouteData.Values["action"]?.ToString();
+
+        // ➤ Ignorar Login + Acesso Negado
+        if (controller == "Login" || (controller == "Home" && action == "AcessoNegado"))
         {
             base.OnActionExecuting(context);
             return;
         }
 
-        // Se não tem sessão, redireciona
+        // ➤ Se NÃO estiver logado, volta ao Login
         if (!context.HttpContext.Session.Keys.Contains("UsuarioId"))
         {
             context.Result = new RedirectToActionResult("Index", "Login", null);
@@ -25,32 +27,74 @@ public class BaseController : Controller
         base.OnActionExecuting(context);
     }
 
+    // ==============================
+    //  PERFIS
+    // ==============================
+
     /// <summary>Id do usuário logado</summary>
     protected int UsuarioId =>
         HttpContext.Session.GetInt32("UsuarioId") ?? 0;
 
-    /// <summary>True se o usuário logado for ADMIN</summary>
+    /// <summary>True se ADMIN</summary>
     protected bool IsAdmin =>
         HttpContext.Session.GetString("Perfil") == PerfilUsuario.Admin.ToString();
+
+    /// <summary>True se USUÁRIO COMUM</summary>
+    protected bool IsUsuario =>
+        HttpContext.Session.GetString("Perfil") == PerfilUsuario.Usuario.ToString();
+
+    /// <summary>True se NORMAL / GUICHÊ</summary>
+    protected bool IsNormal =>
+        HttpContext.Session.GetString("Perfil") == PerfilUsuario.Normal.ToString();
 
     /// <summary>Nome/login do usuário logado</summary>
     protected string UsuarioNome
     {
         get
         {
-            // 1️⃣ Tenta obter da sessão
             var nomeSessao = HttpContext.Session.GetString("UsuarioNome");
-
             if (!string.IsNullOrEmpty(nomeSessao))
                 return nomeSessao;
 
-            // 2️⃣ Tenta obter do Identity/Claims
             var claimName = HttpContext.User?.Identity?.Name;
             if (!string.IsNullOrEmpty(claimName))
                 return claimName;
 
-            // 3️⃣ Valor padrão
             return "DESCONHECIDO";
         }
+    }
+
+    // ==============================
+    //  BLOQUEIOS
+    // ==============================
+
+    protected bool BloquearSeNaoAdmin(ActionExecutingContext context)
+    {
+        if (!IsAdmin)
+        {
+            context.Result = new RedirectToActionResult("AcessoNegado", "Home", null);
+            return true;
+        }
+        return false;
+    }
+
+    protected bool BloquearSeNaoUsuario(ActionExecutingContext context)
+    {
+        if (!IsUsuario)
+        {
+            context.Result = new RedirectToActionResult("AcessoNegado", "Home", null);
+            return true;
+        }
+        return false;
+    }
+
+    protected bool BloquearSeNaoNormal(ActionExecutingContext context)
+    {
+        if (!IsNormal)
+        {
+            context.Result = new RedirectToActionResult("AcessoNegado", "Home", null);
+            return true;
+        }
+        return false;
     }
 }

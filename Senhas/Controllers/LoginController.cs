@@ -22,9 +22,18 @@ public class LoginController : Controller
 
     // LOGIN
     [HttpPost]
-    public async Task<IActionResult> Login(string usuario, string senha)
+    public async Task<IActionResult> Login(string email, string senha)
     {
-        var user = await _auth.LoginAsync(usuario, senha);
+        if (string.IsNullOrWhiteSpace(email) || string.IsNullOrWhiteSpace(senha))
+        {
+            TempData["Erro"] = "Preencha o e-mail e a senha.";
+            return RedirectToAction("Index");
+        }
+
+        email = email.Trim().ToLower();
+
+        var user = await _context.Usuarios
+            .FirstOrDefaultAsync(u => u.Email == email && u.Senha == senha);
 
         if (user == null)
         {
@@ -61,24 +70,21 @@ public class LoginController : Controller
         if (guicheUser > 0)
             HttpContext.Session.SetInt32("GuicheId", guicheUser);
 
-        //  Captura IP
+        // Captura IP e navegador
         var ip = HttpContext.Connection.RemoteIpAddress?.ToString() ?? "Desconhecido";
-
-        //  Captura navegador
         var navegador = Request.Headers["User-Agent"].ToString();
 
-        //  Gravar auditoria
+        // Gravar auditoria
         _context.AuditoriaSistema.Add(new AuditoriaSistema
         {
             UsuarioId = user.Id,
-            UsuarioLogin = user.Nome, // <-- salva o login
+            UsuarioLogin = user.Nome,
             DataHora = DateTime.UtcNow,
             Ip = ip,
             Navegador = navegador,
             Acao = "LOGIN",
             Entidade = "Usuario",
             EntidadeId = user.Id
-
         });
 
         await _context.SaveChangesAsync();
@@ -86,6 +92,7 @@ public class LoginController : Controller
         return RedirectToAction("Index", "Home");
     }
 
+    // LOGOUT
     [HttpPost]
     public IActionResult Logout()
     {
@@ -95,8 +102,14 @@ public class LoginController : Controller
 
     // REGISTRAR
     [HttpPost]
-    public async Task<IActionResult> Registrar(string nome, string sobrenome, string cpf, String User,string email,
-                                               string usuario, string senha, string confirmarSenha)
+    public async Task<IActionResult> Registrar(
+        string nome,
+        string sobrenome,
+        string cpf,
+        string email,
+        string usuario,
+        string senha,
+        string confirmarSenha)
     {
         if (senha != confirmarSenha)
         {
@@ -104,15 +117,17 @@ public class LoginController : Controller
             return RedirectToAction("Index");
         }
 
-        if (await _context.Usuarios.AnyAsync(u => u.Nome == usuario || u.Email == email))
+        email = email.Trim().ToLower();
+
+        if (await _context.Usuarios.AnyAsync(u => u.Email == email))
         {
-            TempData["Erro"] = "Usuário ou e-mail já existe!";
+            TempData["Erro"] = "E-mail já existe!";
             return RedirectToAction("Index");
         }
 
-        if (!System.Text.RegularExpressions.Regex.IsMatch(cpf, @"^\d{11}$"))
+        if (await _context.Usuarios.AnyAsync(u => u.Cpf == cpf))
         {
-            TempData["Erro"] = "CPF inválido! Deve conter 11 números.";
+            TempData["Erro"] = "CPF já existe!";
             return RedirectToAction("Index");
         }
 
@@ -120,11 +135,10 @@ public class LoginController : Controller
 
         var novo = new Usuario
         {
-            Nome = usuario,
+            Nome = nome,
             Sobrenome = sobrenome,
             Email = email,
             Cpf = cpf,
-            Username = User,
             Senha = senha,
             Confirmado = false,
             TokenConfirmacao = token
@@ -163,6 +177,8 @@ public class LoginController : Controller
     [HttpPost]
     public async Task<IActionResult> EsqueciSenha(string email)
     {
+        email = email.Trim().ToLower();
+
         var user = await _context.Usuarios.FirstOrDefaultAsync(u => u.Email == email);
         if (user == null)
         {
@@ -177,7 +193,7 @@ public class LoginController : Controller
         var linkRedefinir = Url.Action("RedefinirSenha", "Login", new { token }, Request.Scheme);
         await EnviarEmailAsync(email, "Redefinir senha", $"Clique para redefinir: <a href='{linkRedefinir}'>Redefinir</a>");
 
-        TempData["Sucesso"] = "Link de redefinição enviado para seu e-mail.";
+        TempData["Sucesso"] = "Link enviado para seu e-mail.";
         return RedirectToAction("Index");
     }
 
@@ -189,6 +205,7 @@ public class LoginController : Controller
         return View();
     }
 
+    // CONFIRMAR NOVA SENHA
     [HttpPost]
     public async Task<IActionResult> RedefinirSenhaConfirmar(string token, string novaSenha, string confirmarSenha)
     {
@@ -213,7 +230,7 @@ public class LoginController : Controller
         return RedirectToAction("Index");
     }
 
-
+    // ENVIO DE E-MAIL
     private async Task EnviarEmailAsync(string para, string assunto, string mensagem)
     {
         var smtpHost = _config["Email:SmtpHost"];

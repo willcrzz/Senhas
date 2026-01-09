@@ -13,8 +13,7 @@ namespace Senhas.Models.Entities
 
         [Required] public string Sobrenome { get; set; } = null!;
 
-        public string Username { get; set; }
-
+        
         [Required] [EmailAddress] public string Email { get; set; } = null!;
 
         [Required]

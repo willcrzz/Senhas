@@ -16,15 +16,19 @@
         }
 
         <h2>Login</h2>
-        <form asp-action="Login" method="post" id="loginForm">
-            <input type="text" name="usuario" placeholder="Usuário" required />
-            <input type="password" name="senha" placeholder="Senha" required />
-            <button type="submit">Entrar</button>
-            <p>
-                <a href="#" onclick="openModal('registerModal')">Registrar</a> |
-                <a href="#" onclick="openModal('forgotModal')">Esqueci minha senha</a>
-            </p>
+        <form asp-action="Login" method="post">
+            <input type="email" name="email" placeholder="E-mail" class="form-control" />
+
+            <input type="password" name="senha" placeholder="Senha" class="form-control" />
+
+            <button type="submit" class="btn btn-primary">Entrar</button>
         </form>
+
+        @if (TempData["Erro"] != null)
+        {
+            <p class="text-danger">@TempData["Erro"]</p>
+        }
+
     </div>
 </div>
 
@@ -37,8 +41,7 @@
             <input type="text" name="nome" placeholder="Nome" required />
             <input type="text" name="sobrenome" placeholder="Sobrenome" required />
             <input type="text" name="cpf" placeholder="CPF" required pattern="\d{11}" title="Digite 11 números" />
-            <input type="email" name="email" placeholder="E-mail" required />
-            <input type="text" name="usuario" placeholder="Usuário" required />
+            <input type="text" name="email" placeholder="E-mail" required />
             <input type="password" name="senha" placeholder="Senha" required pattern=".{6,}" title="Mínimo 6 caracteres" />
             <input type="password" name="confirmarSenha" placeholder="Confirmar Senha" required />
             <button type="submit">Registrar</button>

@@ -17,13 +17,13 @@ public class AdminController : BaseController
     {
         base.OnActionExecuting(context);
 
-        // Se não for admin → bloqueia
         if (!IsAdmin)
         {
-            context.Result = new UnauthorizedResult();
+            context.Result = new RedirectToActionResult("AcessoNegado", "Home", null);
             return;
         }
     }
+
 
 
     // Lista todos usuários e guichês
