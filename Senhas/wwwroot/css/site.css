@@ -112,3 +112,33 @@ footer {
     margin-top: auto;
 }
 
+/*Logout*/
+/* ----------- DROPDOWN USUÁRIO ----------- */
+.dropdown-menu.perfil-menu {
+    background-color: #0f0f0f;
+    border: 1px solid rgba(34,212,253,0.4);
+    border-radius: 8px;
+    padding: 0;
+}
+
+.dropdown-item {
+    color: var(--cor-secundaria);
+    font-weight: 500;
+    padding: 10px 16px;
+}
+
+    .dropdown-item:hover {
+        background-color: var(--cor-terciaria);
+        color: #000 !important;
+    }
+
+.sair-item {
+    color: #ff5252 !important;
+    font-weight: 700;
+}
+
+    .sair-item:hover {
+        background-color: rgba(255,82,82,0.15) !important;
+        color: #ff5252 !important;
+    }
+

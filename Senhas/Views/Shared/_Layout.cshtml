@@ -8,6 +8,8 @@
     <!-- Bootstrap opcional -->
     <link rel="stylesheet"
           href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" 
+          href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
 
     <!-- Seu CSS global -->
     <link rel="stylesheet" href="~/css/site.css" />
@@ -27,7 +29,7 @@
 
                 <div id="navbarContent" class="collapse navbar-collapse">
                     <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                        
+
                         <li class="nav-item">
                             <a class="nav-link" href="/Home">Home</a>
                         </li>
@@ -35,16 +37,47 @@
                         <li class="nav-item">
                             <a class="nav-link" href="/Dashboard">Dashboard</a>
                         </li>
-                        
+
                         <li class="nav-item">
                             <a class="nav-link" href="/Painel">Painel</a>
                         </li>
-                        
+
                     </ul>
+
+                    <!-- DROPDOWN DO USUÁRIO -->
+                    <ul class="navbar-nav ms-auto">
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle fw-bold text-light"
+                               href="#" id="dropdownUser" role="button"
+                               data-bs-toggle="dropdown">
+                                <i class="bi bi-file-person-fill me-1"></i>
+                                @Context.Session.GetString("UsuarioNome")
+                            </a>
+
+
+                            <ul class="dropdown-menu dropdown-menu-end bg-dark border-secondary">
+                                <li>
+                                    <span class="dropdown-item-text text-light">
+                                        Perfil: @Context.Session.GetString("Perfil")
+                                    </span>
+                                </li>
+                                <li><hr class="dropdown-divider border-secondary"></li>
+                                <li>
+                                    <form class="px-3" method="post" action="/Login/Logout">
+                                        <button type="submit" class="btn btn-danger w-100">
+                                            Sair
+                                        </button>
+                                    </form>
+                                </li>
+                            </ul>
+                        </li>
+                    </ul>
+
                 </div>
             </div>
         </nav>
     </header>
+
 
     <!-- BODY -->
     <main class="container py-4">
