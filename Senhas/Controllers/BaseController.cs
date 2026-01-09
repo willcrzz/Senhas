@@ -10,14 +10,14 @@ public class BaseController : Controller
         var controller = context.RouteData.Values["controller"]?.ToString();
         var action = context.RouteData.Values["action"]?.ToString();
 
-        // ➤ Ignorar Login + Acesso Negado
+        //  Ignorar Login + Acesso Negado
         if (controller == "Login" || (controller == "Home" && action == "AcessoNegado"))
         {
             base.OnActionExecuting(context);
             return;
         }
 
-        // ➤ Se NÃO estiver logado, volta ao Login
+        //  Se NÃO estiver logado, volta ao Login
         if (!context.HttpContext.Session.Keys.Contains("UsuarioId"))
         {
             context.Result = new RedirectToActionResult("Index", "Login", null);

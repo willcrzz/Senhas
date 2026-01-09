@@ -1,4 +1,16 @@
-﻿<!DOCTYPE html>
+﻿@using Microsoft.AspNetCore.Http
+
+@{
+    var usuarioId = Context.Session.GetInt32("UsuarioId");
+    var perfil = Context.Session.GetString("Perfil");
+    var usuarioNome = Context.Session.GetString("UsuarioNome");
+
+    bool isAdmin = perfil == "Admin";
+    bool isNormal = perfil == "Normal";
+    bool isUser = perfil == "User"; // 👈 novo perfil
+}
+
+<!DOCTYPE html>
 <html lang="pt-br">
 <head>
     <meta charset="utf-8" />
@@ -33,15 +45,24 @@
                         <li class="nav-item">
                             <a class="nav-link" href="/Home">Home</a>
                         </li>
-
-                        <li class="nav-item">
-                            <a class="nav-link" href="/Dashboard">Dashboard</a>
-                        </li>
+                        
+                       
 
                         <li class="nav-item">
                             <a class="nav-link" href="/Painel">Painel</a>
                         </li>
+                        @if (isAdmin)
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link" href="/Dashboard">Dashboard</a>
+                            </li>
 
+                            <li class="nav-item">
+                                <a class="nav-link" href="/Admin">Admin</a>
+                            </li>
+                           
+                        }
+                        
                     </ul>
 
                     <!-- DROPDOWN DO USUÁRIO -->

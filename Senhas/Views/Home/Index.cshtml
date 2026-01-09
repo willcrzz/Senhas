@@ -1,6 +1,20 @@
-﻿@{
+﻿@using Microsoft.AspNetCore.Http
+
+@{
+    var usuarioId = Context.Session.GetInt32("UsuarioId");
+    var perfil = Context.Session.GetString("Perfil");
+    var usuarioNome = Context.Session.GetString("UsuarioNome");
+
+    bool isAdmin = perfil == "Admin";
+    bool isNormal = perfil == "Normal";
+    bool isUser = perfil == "User"; // 👈 novo perfil
+}
+
+@{
     Layout = "_Layout";
 }
+
+
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
@@ -28,14 +42,18 @@
         <a class="apresentacao__links__navegacao" href="/Senhas/Gerar">
             Retirar senha
         </a>
+       
+        @if (isAdmin || isNormal)
+        {
+            <a class="apresentacao__links__navegacao" href="/Painel">
+                Painel TV
+            </a>
 
-        <a class="apresentacao__links__navegacao" href="/Atendimento">
-            Painel do Atendente
-        </a>
-
-        <a class="apresentacao__links__navegacao" href="/Painel">
-            Painel TV
-        </a>
+            <a class="apresentacao__links__navegacao" href="/Atendimento">
+                Painel do Atendente
+            </a>
+        }
+       
     </div>
 
 </body>

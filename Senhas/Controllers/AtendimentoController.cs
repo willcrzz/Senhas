@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.EntityFrameworkCore;
 using Senhas.Models.Entities;
 using Senhas.Models.Enums;
@@ -34,9 +35,7 @@ namespace Senhas.Controllers
             base.OnActionExecuting(context);
         }
 
-
-       
-
+        
 
         // Tela principal do atendente
         public IActionResult Index()
