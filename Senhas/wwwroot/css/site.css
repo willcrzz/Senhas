@@ -14,11 +14,16 @@
 }
 
 body {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
     background-color: var(--cor-primaria);
     color: var(--cor-secundaria);
     font-family: var(--fonte);
 }
-
+main, .apresentacao__links {
+    flex-shrink: 0;
+}
 /* ---------------- NAVBAR ---------------- */
 .navbar {
     background-color: rgba(0, 0, 0, 0.95) !important;
@@ -97,6 +102,13 @@ table {
 
 /* Rodapé */
 footer {
-    color: rgba(255,255,255,0.5);
-    border-top: 1px solid rgba(255,255,255,0.1);
+    text-align: center;
+    color: rgb(107 114 128 / 1); /* text-gray-500 (muted) */
+    padding-top: 0.75rem; /* py-3 */
+    padding-bottom: 0.75rem;
+    border-top-width: 1px; /* border-t */
+    border-top-style: solid;
+    border-top-color: rgb(229 231 235 / 1); /* gray-200 */
+    margin-top: auto;
 }
+
